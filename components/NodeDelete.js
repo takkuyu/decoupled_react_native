@@ -2,12 +2,21 @@ import React from "react";
 import { getAuthClient } from "../utils/auth";
 import {
   Button,
+  Alert
 } from 'react-native';
 const auth = getAuthClient();
 
 const NodeDelete = ({ id, title, onSuccess }) => {
+  // @todo: Figure out how to do confirm on react-native.
   function doConfirm() {
-    return window.confirm(`Are you sure you want to delete ${title}?`);
+    return Alert.alert(
+      `Are you sure you want to delete ${title}?`,
+      null,
+      [
+        { text: 'NO', onPress: () => console.warn('NO Pressed'), style: 'cancel' },
+        { text: 'YES', onPress: () => {return true} },
+      ]
+    );
   }
 
   function doDelete() {
@@ -39,7 +48,7 @@ const NodeDelete = ({ id, title, onSuccess }) => {
   }
 
   return (
-    <Button onPress={event => doConfirm() && doDelete()} title="delete" />
+    <Button onPress={event => doDelete()} title="delete" />
   );
 };
 

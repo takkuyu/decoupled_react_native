@@ -6,7 +6,9 @@
  * To use import getAuthClient, and initialize a client:
  * const auth = getAuthClient(optionalConfig);
  */
-import { AsyncStorage } from 'react-native';
+
+// Use new version of AsyncStorage: https://react-native-community.github.io/async-storage/docs/api.
+import AsyncStorage from '@react-native-community/async-storage'
 
 const refreshPromises = [];
 
@@ -78,9 +80,13 @@ export function getAuthClient(config = {}) {
   /**
    * Delete the stored OAuth token, effectively ending the user's session.
    */
-  function logout() {
-    AsyncStorage.removeItem(config.token_name);
-    return Promise.resolve(true);
+  async function logout() {
+    try {
+      await AsyncStorage.removeItem(config.token_name);
+      return Promise.resolve(true);
+    } catch (e) {
+      console.log(e)
+    }
   };
 
 
@@ -105,6 +111,7 @@ export function getAuthClient(config = {}) {
     }
   }
 
+
   /**
    * Get the current OAuth token if there is one.
    *
@@ -115,20 +122,25 @@ export function getAuthClient(config = {}) {
    *   Returns a Promise that resolves to the current token, or false.
    */
   async function token() {
-    console.log(AsyncStorage.getItem(config.token_name))
-    const token = (AsyncStorage.getItem(config.token_name) !== null)
-      ? AsyncStorage.getItem(config.token_name) //@todo : add json parse
-      : false;
+    try {
+      const jsonValue = await AsyncStorage.getItem(config.token_name);
+      console.log(jsonValue)
+      const token = jsonValue != null ? JSON.parse(jsonValue) : false
 
-    if (!token) {
-      Promise.reject();
-    }
+      if (!token) {
+        return false;
+      }
 
-    const { expires_at, refresh_token } = token;
-    if (expires_at - config.expire_margin < Date.now() / 1000) {
-      return refreshToken(refresh_token);
+      const { expires_at, refresh_token } = token;
+
+      if (expires_at - config.expire_margin < Date.now() / 1000) {
+        return refreshToken(refresh_token);
+      }
+
+      return Promise.resolve(token);
+    } catch (e) {
+      console.log(e)
     }
-    return Promise.resolve(token);
   };
 
   /**
@@ -187,11 +199,15 @@ export function getAuthClient(config = {}) {
   * @returns {object}
   *   Returns the token with an additional expires_at property added.
   */
-  function saveToken(data) {
+  async function saveToken(data) {
     let token = Object.assign({}, data); // Make a copy of data object.
     token.date = Math.floor(Date.now() / 1000);
     token.expires_at = token.date + token.expires_in;
-    AsyncStorage.setItem(config.token_name, JSON.stringify(token));
+    try {
+      await AsyncStorage.setItem(config.token_name, JSON.stringify(token));
+    } catch (e) {
+      console.log(e)
+    }
     return token;
   }
 
