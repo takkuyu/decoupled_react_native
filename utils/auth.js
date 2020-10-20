@@ -24,7 +24,7 @@ export function getAuthClient(config = {}) {
   const defaultConfig = {
     // Base URL of your Drupal site.
     // @Note: https://localhost:32837 does not work. It gives network error, so try http one.
-    base: 'http://localhost:32838',
+    base: 'http://10.0.2.2:32807',
     // Name to use when storing the token in localStorage.
     token_name: 'drupal-oauth-token',
     // OAuth client ID - get from Drupal. (https://localhost:32825/admin/config/services/consumer)
@@ -219,9 +219,9 @@ export function getAuthClient(config = {}) {
   async function isLoggedIn() {
     const oauth_token = await token();
     if (oauth_token) {
-      return true;
+      return Promise.resolve(true);
     }
-    return false;
+    return Promise.reject(false);;
   };
 
   /**

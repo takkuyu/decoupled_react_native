@@ -18,7 +18,14 @@ const App = () => {
 const styles = StyleSheet.create({
   Container:{
     marginTop: 50,
-    padding: 15,
+    padding: 15,  
+    borderWidth: 1,
+    borderColor: '#000',
+    borderStyle: "solid",
+    marginVertical: 16,
+    marginHorizontal: 8,
+    maxWidth: 600,
+    padding: 16,
   },
 })
 

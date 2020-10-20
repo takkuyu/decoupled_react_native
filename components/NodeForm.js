@@ -127,12 +127,14 @@ const NodeForm = ({ id, title, body, onSuccess }) => {
       <View>
         <TextInput
           value={values.title}
+          style={styles.Input}
           placeholder="Title"
           onChangeText={(value) => setValues({ ...values, ['title']: value })}
         />
         <TextInput
           multiline={true}
           numberOfLines={4}
+          style={styles.Input}
           value={values.body}
           placeholder="Body"
           onChangeText={(value) => setValues({ ...values, ['body']: value })}
@@ -141,11 +143,27 @@ const NodeForm = ({ id, title, body, onSuccess }) => {
           // style={styles.saveButton}
           onPress={handleSubmit}
         >
-          <Text>{id ? 'Edit existing node' : 'Add new node'}</Text>
+          <Text style={styles.Button}>{id ? 'Edit existing node' : 'Add new node'}</Text>
         </TouchableOpacity>
       </View>
     </View>
   )
 };
+
+const styles = StyleSheet.create({
+  Input:{
+    marginVertical: 5,
+    borderWidth: 1,
+    borderColor: '#000',
+    borderStyle: "solid",
+  },
+  Button:{
+    width: 150,
+    backgroundColor: 'green',
+    color: '#fff',
+    marginVertical: 5,
+    padding: 5,
+  },
+})
 
 export default NodeForm;

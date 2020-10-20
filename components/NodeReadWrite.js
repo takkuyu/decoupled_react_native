@@ -118,8 +118,8 @@ const NodeReadWrite = () => {
     });
 
     auth.fetchWithAuthentication(url, { headers })
-      .then((response) => response.json())
-      .then((data) => {
+    .then((response) => response.json())
+    .then((data) => {
         if (isValidData(data)) {
           // Initialize the list of content with data retrieved from Drupal.
           updateContent(data.data);
@@ -142,7 +142,11 @@ const NodeReadWrite = () => {
 
   return (
     <View>
-      <Text>Site content</Text>
+      <Text style={{
+        fontSize: 22,
+        fontWeight: '600',
+        textAlign: 'center'
+      }}>Site content</Text>
       {content.length ? (
         <>
           <Text htmlFor="filter">Type to filter:</Text>
@@ -151,6 +155,14 @@ const NodeReadWrite = () => {
             name="filter"
             placeholder="Start typing ..."
             onChange={(event => setFilter(event.target.value.toLowerCase()))}
+          />
+          <View
+            style={{
+              marginTop: 5,
+              marginBottom: 10,
+              borderBottomColor: 'red',
+              borderBottomWidth: 1,
+            }}
           />
           {
             // If there's a `filter` apply it to the list of nodes.
@@ -176,6 +188,14 @@ const NodeReadWrite = () => {
       ) : (
           <NoData />
         )}
+      <View
+        style={{
+          marginTop: 5,
+          marginBottom: 10,
+          borderBottomColor: 'red',
+          borderBottomWidth: 1,
+        }}
+      />
       {showNodeAdd ? (
         <>
           <Text>Add a new article</Text>

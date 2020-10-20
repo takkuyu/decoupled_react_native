@@ -16,10 +16,9 @@ const LoginForm = () => {
   const [isLoggedIn, setLoggedIn] = useState(false);
 
   useEffect(() => {
-    const isAuthenticated = auth.isLoggedIn();
-    if (isAuthenticated) {
+    auth.isLoggedIn().then((res) => {
       setLoggedIn(true);
-    }
+    })
   }, []);
 
   const handleSubmit = (event) => {
